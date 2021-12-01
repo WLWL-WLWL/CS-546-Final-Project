@@ -36,12 +36,24 @@ async function create(name, releaseDate, developer, genre, price, boxart) {
         genre: genre,
         price: price,
         boxart: boxart,
+        totalVotes: 0,
+        averageUserRating: 0,
         comments: []
     };
 
     const info = await gameCollection.insertOne(game);
 
     return ObjectIdToString(game);
+}
+
+async function addRating(id, rating){
+    validateId(id);
+
+    const game = await gameCollection.findOne({_id: ObjectId(id)});
+    if(game == null)
+        throw new Error(`No item was found in User collection that match with id: ${id}`);
+    
+    
 }
 
 async function getGame(id) {

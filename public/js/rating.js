@@ -2,12 +2,8 @@
     var leftGame = $('#Left');
     var rightGame = $('#Right');
 
-    function resetGames() {
-        var config = {
-            method: 'get',
-            url: '/ratings/reset'
-        };
-        $.ajax(startConfig).then(function(response){
+    function resetGames(config) {
+        $.ajax(config).then(function(response){
             var leftHTML = "<h1 id='Name'>" + response.name1 + "</h1>" + 
                 "<img src='" + response.image1 + "'/>" +
                 "<p id='Release'>" + response.release1 + "</p>" + 
@@ -24,6 +20,21 @@
     }
 
     leftGame.on('click', function() {
+        var config = {
+            method: 'POST',
+            url: '/ratings/reset',
+            data: {side: 'left'}
+        };
+        resetGames(config);
+    });
+
+    rightGame.on('click', function() {
+        var config = {
+            method: 'POST',
+            url: '/ratings/reset',
+            data: {side: 'right'}
+        };
+        resetGames(config);
     });
 
 })(window.jQuery);
