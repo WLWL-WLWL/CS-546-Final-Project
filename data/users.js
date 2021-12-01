@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
+const videogames = mongoCollections.videogames;
 let { ObjectId } = require('mongodb');
 
 function ObjectIdToString(obj) {
@@ -55,4 +56,24 @@ async function getUser(id) {
     return ObjectIdToString(user);
 }
 
-module.exports = {create, getUser}
+async function addGame(userId, gameId) {
+    validateId(userId);
+    validateId(gameId);
+
+    const userCollection = await users();
+
+    const user = await userCollection.findOne({_id: ObjectId(userId)});
+    if(user == null)
+        throw new Error(`No item was found in User collection that match with id: ${userId}`);
+
+    const game = await (await videogames()).findOne({_id: ObjectId(gameId)});
+    if(game == null)
+        throw new Error(`No item was found in Video Game collection that match with id: ${gameId}`)
+
+    const info = await userCollection.updateOne({_id: user._id}, {$set: {voteHistory: user.voteHistory.concat([gameId])}});
+
+    return info;
+
+}
+
+module.exports = {create, getUser, addGame}
