@@ -9,9 +9,9 @@ router.get('/:id', async (req, res) => {
     }
 
     // Make call from videogames.users to get user data with id
-    // const videogameData = await videogames.getGame(req.params.id);
+    const videogameData = await videogames.getGame(req.params.id);
 
-    res.render('videogames/videogamesPage.handlebars', {videogameData: undefined});
+    res.render('videogames/videogamesPage.handlebars', {videogameData: videogameData});
 })
 
 module.exports = router;

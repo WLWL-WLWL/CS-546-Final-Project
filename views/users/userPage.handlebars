@@ -1,3 +1,15 @@
 <h1>{{userData.username}}</h1>
 <p>Full Name: {{userData.firstname}} {{userData.lastname}}</p>
 <p>Number of total votes: {{userData.numberOfVotes}}</p>
+<h2>Vote History</h2>
+<ul>
+    {{#each gameList}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+<h2>Genre Stats</h2>
+<ol>
+    {{#each genreStats}}
+    <li>{{@key}}: {{this}}%</li>
+    {{/each}}
+</ol>
