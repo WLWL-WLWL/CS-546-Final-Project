@@ -36,12 +36,36 @@ async function create(name, releaseDate, developer, genre, price, boxart) {
         genre: genre,
         price: price,
         boxart: boxart,
+        totalVotes: 0,
+        averageUserRating: 0,
         comments: []
     };
 
     const info = await gameCollection.insertOne(game);
 
     return ObjectIdToString(game);
+}
+
+async function addRating(id, rating){
+    validateId(id);
+    const objId = ObjectId(id);
+
+    let game = await gameCollection.findOne({_id: objId});
+    if(game == null)
+        throw new Error(`No item was found in User collection that match with id: ${id}`);
+    
+    let newRating = (game.totalVotes * game.averageUserRating + rating) / (game.totalVotes + 1);
+
+    await gameCollection.updateOne({_id: objId}, {$set: {averageUserRating: newRating, totalVotes: game.totalVotes+1}});
+    game = await gameCollection.findOne({_id: objId});
+
+    return ObjectIdToString(game);
+}
+
+async function getRandomGame() {
+    const gameCollection = await videogames();
+    const game = await gameCollection.aggregate([{$sample: {size: 1}}]).toArray();
+    return ObjectIdToString(game[0]);
 }
 
 async function getGame(id) {
@@ -56,4 +80,4 @@ async function getGame(id) {
     return ObjectIdToString(game);
 }
 
-module.exports = {create, getGame}
+module.exports = {create, addRating, getRandomGame, getGame}
