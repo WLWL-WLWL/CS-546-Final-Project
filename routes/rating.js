@@ -25,12 +25,16 @@ router.get('/', async (req, res) => {
 
 router.post('/reset', async (req, res) => {
     try{
-        let gameData = undefined;
         if(req.data.side == 'left'){
-            gameData = await games.getGame(req.session.leftGame);
+            await games.addRating(req.session.leftGame, 1);
+            await games.addRating(req.session.rightGame, 0);
         } else {
-            gameData = await games.getGame(req.session.rightGame);
+            await games.addRating(req.session.rightGame, 1);
+            await games.addRating(req.session.leftGame, 0);
         }
-        
+        // const newLeft = 
+    } catch(e){
+    }
+});
 
 module.exports = router;
