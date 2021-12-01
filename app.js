@@ -26,6 +26,14 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use('/rating', (req, res, next) => {
+    // console.log(req.url);
+    if (!req.session.user) {
+        return res.redirect('/');
+    } else {
+        return next();
+    } 
+});
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
