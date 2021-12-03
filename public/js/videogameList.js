@@ -1,3 +1,5 @@
+let test
+
 function getAllCards() {
     let cards = document.getElementsByClassName("card");
     let videogames = [];
